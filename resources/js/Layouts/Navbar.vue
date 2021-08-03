@@ -24,10 +24,51 @@
                             </div>
                         </div>
 
-                        <div class="hidden sm:flex sm:items-center sm:ml-6">
+                        <div class="hidden md:flex md:items-center md:ml-6" v-if="$page.props.auth.user"  id="testing">
                             <!-- Settings Dropdown -->
-                            <div class="ml-3 relative" v-if="$page.props.auth.user">
+                            <div class="ml-5 relative">
                                 <breeze-dropdown align="right" width="48">
+                                    <template #trigger>
+                                        <span class="inline-flex rounded-md">
+                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                                <ShoppingCartIcon class="h-5 w-5 text-blue-500"/>
+                                                ({{$store.state.carts.length}})
+                                                <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </span>
+                                    </template>
+
+                                    <template #content v-if="$store.state.carts" style="width: 18rem;" width="54">
+                                        <div  v-for="cart in $store.state.carts" :key="cart.id">
+                                            <breeze-dropdown-link :href="route(`products`)" as="button">
+                                                <div class="row">
+                                                    <div class="col-2">
+                                                        <img :src="cart.product.image_url" alt="img" width="60" height="60">
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <span>{{ cart.product.product_name }}</span>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <span style="color:#fa591d; font-weight:bold;">{{ cart.product.price }}</span>
+                                                    </div>
+                                                </div>
+                                            </breeze-dropdown-link>
+                                            <hr>
+                                        </div>
+                                    </template>
+
+                                     <template #content v-else> 
+                                            <breeze-dropdown-link :href="route('dashboard')" as="button">
+                                                Product List
+                                            </breeze-dropdown-link>
+                                    </template>
+                                </breeze-dropdown>
+                            </div>
+
+                            <div class="ml-3 relative">
+                                 <breeze-dropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -47,10 +88,56 @@
                                     </template>
                                 </breeze-dropdown>
                             </div>
+                        </div>
 
-                            <div class="ml-3 relative" v-else>
+                        <div class="hidden sm:flex sm:items-center sm:ml-6" v-else>
+                            <div class="ml-3 relative">
+                                <breeze-dropdown align="right" width="48">
+                                    <template #trigger>
+                                        <span class="inline-flex rounded-md">
+                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                                Cart
+                                                <!-- <font-awesome-icon icon="fa-solid fa-cart" /> -->
+                                                <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </span>
+                                    </template>
+
+                                    <template #content  style="width: 18rem;">
+                                        <div>
+                                            <breeze-dropdown-link :href="route(`login`)" as="button">
+                                                Login
+                                            </breeze-dropdown-link>
+                                        </div>
+                                    </template>
+                                </breeze-dropdown>
+                            </div>
+
+                            <div class="ml-3 relative">
+                                 <breeze-dropdown align="right" width="48">
+                                    <template #trigger>
+                                        <span class="inline-flex rounded-md">
+                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                                Hai, Login dulu yuk
+
+                                                <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </span>
+                                    </template>
+
+                                    <template #content>
+                                        <breeze-dropdown-link :href="route('login')" method="get">
+                                            Log in
+                                        </breeze-dropdown-link>
+                                    </template>
+                                </breeze-dropdown>
                             </div>
                         </div>
+
 
                         <!-- Hamburger -->
                         <div class="-mr-2 flex items-center sm:hidden">
@@ -109,6 +196,8 @@
     import BreezeDropdownLink from '@/Components/DropdownLink'
     import BreezeNavLink from '@/Components/NavLink'
     import BreezeResponsiveNavLink from '@/Components/ResponsiveNavLink'
+    import { mapMutations, mapActions } from 'vuex'
+    import { ShoppingCartIcon } from '@heroicons/vue/outline'
 
     export default {
         components: {
@@ -117,12 +206,45 @@
             BreezeDropdownLink,
             BreezeNavLink,
             BreezeResponsiveNavLink,
+            ShoppingCartIcon
         },
 
         data() {
             return {
                 showingNavigationDropdown: false,
+                cartList: [],
+                loading: false
             }
         },
+        // methods: {
+        //     ...mapActions(['getCart']),
+        //     ...mapMutations(['setCart', 'resetCart']),
+        //     getCartList() {
+        //         console.log('NAVBAR')
+        //         this.loading = true
+        //         this.getCart()
+        //         .then(result => {
+        //             console.log(result, "=====")
+        //             // this.resetCart()
+        //             // this.setCart('result.')
+        //         })
+        //         .catch(err => {
+        //             // this.$store.state.error = err
+        //             this.loading = false
+        //         })
+        //     }
+        // },
+        beforeCreate() {
+            this.$store.dispatch('getCart')
+                .then(result => {
+                    console.log(result, "=====")
+                    this.$store.commit('resetCart')
+                    this.$store.commit('setCart', result.data)
+                })
+                .catch(err => {
+                    // this.$store.state.error = err
+                    this.loading = false
+                })
+        }
     }
 </script>

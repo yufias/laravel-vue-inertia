@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,28 @@ class CartController extends Controller
             'product_id',
             'quantity'
         )->where('user_id', '=', Auth::id())->get();
+
+        return response()->json($cart);
+
+        // return Inertia::render('Cart', [
+        //     'cart' => $cart
+        // ]);
+    }
+
+    /**
+     * Display a cart list with Inertia.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function cartDisplay()
+    {
+        $cart = Cart::with('product', 'user')
+        ->select('id',
+            'user_id',
+            'product_id',
+            'quantity'
+        )->where('user_id', '=', Auth::id())->get();
+
 
         return Inertia::render('Cart', [
             'cart' => $cart
@@ -63,11 +86,11 @@ class CartController extends Controller
         ->where('product_id', '=', $request->product_id)
         ->first();
 
-        $productQuantity = Product::with('category')
-        ->select('id',
-        'sold',
-        'stock'
-        )->where(['id' => $request->product_id])->get()->first();
+        // $productQuantity = Product::with('category')
+        // ->select('id',
+        // 'sold',
+        // 'stock'
+        // )->where(['id' => $request->product_id])->get()->first();
 
         if(Auth::user()) {
             if($productCheck) {
@@ -125,6 +148,37 @@ class CartController extends Controller
     public function update(Request $request, $id)
     {
         //
+        // dd($request->quantity);
+        // dd($id);
+        // die;
+        if(Auth::id()) {
+            if($request->operator == 'plus') {
+                Cart::where(
+                    'id', $id
+                )
+                ->increment('quantity');
+            } else if($request->operator == 'minus') {
+                Cart::where(
+                    'id', $id
+                )
+                ->decrement('quantity');
+            } else {
+                Cart::where(
+                    'id', $id
+                )
+                ->update(['quantity' => $request->quantity]);
+            }
+    
+            return response()->json([
+                'status'=>  200,
+                'message'=>'Update quantity success'
+            ], 200);
+        } else {
+            return response()->json([
+                'status'=>  401,
+                'message'=>'Unauthorized'
+            ], 401);
+        }
     }
 
     /**
@@ -136,5 +190,18 @@ class CartController extends Controller
     public function destroy($id)
     {
         //
+        if(Auth::id()) {
+            Cart::where('id',$id)->delete();
+
+            return response()->json([
+                'status'=>  200,
+                'message'=>'Product deleted from cart'
+            ], 200);
+        }  else {
+            return response()->json([
+                'status'=>  401,
+                'message'=>'Unauthorized'
+            ], 401);
+        }
     }
 }

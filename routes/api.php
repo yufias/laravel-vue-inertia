@@ -54,6 +54,9 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh');
     Route::get('profile', 'AuthController@userProfile');
     Route::get('cart', 'CartController@index');
+    Route::post('cart', 'CartController@store');
+    Route::put('cart/{id}', 'CartController@update');
+    Route::delete('cart/{id}', 'CartController@destroy');
 });
 
 // Route::middleware('auth:api')->get('/products', [ProductController::class, 'index']);
@@ -63,5 +66,3 @@ Route::get('/products', [ProductController::class, 'index']);
 
 
 // Route::get('/cart', [CartController::class, 'index']);
-
-Route::post('/cart', [CartController::class, 'store']);

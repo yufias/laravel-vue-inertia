@@ -20,11 +20,41 @@
 
 <script>
     import Navbar from '@/Layouts/Navbar'
+    import { mapState, mapMutations, mapActions } from 'vuex'
+
 
     export default {
         props: ['products'],
         components: {
             Navbar,
         },
+        methods: {
+            // ...mapActions(['getCart']),
+            // ...mapMutations(['setCart', 'resetCart']),
+            // getCartList() {
+            //     console.log('NAVBAR')
+            //     this.loading = true
+            //     this.getCart()
+            //     .then(result => {
+            //         console.log(result, "=====")
+            //     })
+            //     .catch(err => {
+            //         this.loading = false
+            //     })
+            // }
+        },
+        beforeCreate() {
+            // this.getCartList()
+            this.$store.dispatch('getCart')
+                .then(result => {
+                    console.log(result, "=====")
+                    this.$store.commit('resetCart')
+                    this.$store.commit('setCart', response.data)
+                })
+                .catch(err => {
+                    // this.$store.state.error = err
+                    this.loading = false
+                })
+        }
     }
 </script>

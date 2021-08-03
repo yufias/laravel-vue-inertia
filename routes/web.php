@@ -33,10 +33,13 @@ Route::get('/dashboard', function () {
 
 Route::get('/products', [ProductController::class, 'index'])->name('products');
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('detail_products');
-Route::get('/cart', [CartController::class, 'index'])->name('cart');
+// Route::get('/cart', [CartController::class, 'cartDisplay'])->name('cart');
 Route::get('/profile', function() {
     return Inertia::render('Profile');
 })->name('profile');
+Route::get('/cart', function() {
+    return Inertia::render('Cart');
+})->name('cart');
 
 
 
